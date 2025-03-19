@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Video Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-image: url('c.png'); /* Pareho ng login page */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px #F49023;
+            padding: 20px;
+            text-align: center;
+        }
+
+        video {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #ffcc00;
+        }
+
+        @media (max-width: 1020px) {
+            .video-container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="video-container">
+        <video id="myVideo" muted controls loop autoplay>
+            <source src="haha.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var video = document.getElementById("myVideo");
+
+            if (sessionStorage.getItem("loggedIn") === "true") {
+                video.muted = false;
+                video.volume = 1.0;
+
+                var playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log("Autoplay with sound successful!");
+                    }).catch(error => {
+                        console.log("Autoplay blocked, forcing play...");
+                        video.muted = true;
+                        video.play().then(() => {
+                            setTimeout(() => {
+                                video.muted = false;
+                            }, 1000);
+                        });
+                    });
+                }
+
+                sessionStorage.removeItem("loggedIn");
+            } else {
+                console.log("User not logged in, autoplay disabled.");
+            }
+        });
+    </script>
+
+</body>
+
+</html>
